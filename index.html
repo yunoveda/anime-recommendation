@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anime Recommendations</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+:root{
+ --main:#00ff7f;
+ --bg:#000;
+ --card:#121212;
+ --text:#fff;
+}
+.light{--bg:#f5f5f5;--card:#fff;--text:#000}
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ font-family:Segoe UI,sans-serif;
+ background:var(--bg);
+ color:var(--text)
+}
+
+/* LOADING LINE */
+#loader{
+ position:fixed;
+ top:0;left:0;
+ height:4px;
+ width:0%;
+ background:linear-gradient(90deg,#00ff7f,#00ffaa);
+ z-index:9999;
+ transition:width .4s ease;
+}
+.loading{width:90%}
+.loaded{width:100%}
+
+/* LIVE WALLPAPER (UNCHANGED) */
+video.bg{
+ position:fixed;
+ inset:0;
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ z-index:-2
+}
+#overlay{
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.6);
+ z-index:-1
+}
+
+/* HEADER */
+header{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:14px;
+ background:rgba(0,0,0,.7);
+ backdrop-filter:blur(6px)
+}
+.left,.right{display:flex;gap:10px;flex-wrap:wrap}
+
+button,input{
+ padding:8px 14px;
+ border:none;
+ border-radius:20px;
+ background:#1e1e1e;
+ color:#fff;
+ cursor:pointer;
+ transition:.25s;
+}
+button:hover{transform:scale(1.1)}
+button:active{transform:scale(.95)}
+
+#searchBar{width:200px}
+
+/* GRID */
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+ gap:20px;
+ padding:20px
+}
+
+.card{
+ background:var(--card);
+ border-radius:16px;
+ overflow:hidden;
+ position:relative;
+ cursor:pointer;
+ transition:.25s
+}
+.card:hover{transform:translateY(-6px)}
+
+.card img{
+ width:100%;
+ height:280px;
+ object-fit:cover
+}
+
+.banner{
+ position:absolute;
+ bottom:0;left:0;right:0;
+ background:linear-gradient(transparent,rgba(0,0,0,.9));
+ padding:10px;
+ font-size:13px
+}
+
+/* SETTINGS */
+#settings{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.9);
+ z-index:999
+}
+#settings .box{
+ background:#111;
+ padding:20px;
+ max-width:500px;
+ margin:80px auto;
+ border-radius:16px
+}
+.genres{
+ display:flex;
+ flex-wrap:wrap;
+ gap:8px;
+ justify-content:center
+}
+
+/* CHATBOT */
+#chat{
+ position:fixed;
+ bottom:0;right:0;
+ width:320px;
+ background:#111;
+ padding:10px
+}
+#chatLog{
+ height:140px;
+ overflow:auto;
+ font-size:13px
+}
+</style>
+</head>
+
+<body>
+
+<div id="loader"></div>
+
+<!-- LIVE WALLPAPER (DO NOT TOUCH) -->
+<video class="bg" autoplay muted loop playsinline>
+ <source src="day.mp4" type="video/mp4">
+</video>
+<div id="overlay"></div>
+
+<header>
+ <div class="left">
+  <button onclick="loadHome()">🏠 Home</button>
+  <button onclick="openWatchlist()">📋 Watchlist</button>
+  <button onclick="loadCalendar()">📅 Releases</button>
+  <input id="searchBar" placeholder="Search anime..." oninput="searchAnime(this.value)">
+ </div>
+ <div class="right">
+  <button onclick="toggleTheme()">🎨</button>
+  <button onclick="openSettings()">⚙️</button>
+ </div>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<!-- CHATBOT -->
+<div id="chat">
+ <div id="chatLog"></div>
+ <input id="chatInput" placeholder="Describe anime you want">
+ <button onclick="chatSearch()">Send</button>
+</div>
+
+<!-- SETTINGS -->
+<div id="settings">
+ <div class="box">
+  <h3>Genres</h3>
+  <div class="genres" id="genres"></div>
+  <button onclick="closeSettings()">Close</button>
+ </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+if("serviceWorker" in navigator){
+ navigator.serviceWorker.register("sw.js");
+}
+</script>
+
+</body>
+</html>
+
+

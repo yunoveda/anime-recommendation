@@ -1,0 +1,8 @@
+{
+  "name": "Anime Recommendations",
+  "short_name": "AnimeRec",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00ff7f"
+}
